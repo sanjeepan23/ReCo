@@ -83,6 +83,7 @@ def create_model(args):
     return model
 
 def main():
+    """Supervised Learning pipeline with ReCo support for full label dataset"""
     args = parse_args()
     print(f"Training on {args.dataset} dataset with {args.model} model")
 

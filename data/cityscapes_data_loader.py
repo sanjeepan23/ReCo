@@ -13,6 +13,17 @@ import glob
 import utils.img_processing as img_processing
 
 class CityscapesDataset(Dataset):
+    """PyTorch dataset for Cityscapes with support for partial labeling.
+   
+    Args:
+        data_root: Dataset directory
+        mode: 'train' or 'val'
+        label_ratio: Ratio of labeled pixels (for partial label setting)
+        random_seed: Seed for reproducibility
+        input_dims: Input dimensions for cropping
+        scale_range: Range for random scaling
+        enable_transforms: Whether to apply data augmentation
+    """
     def __init__(self, 
                  data_root, 
                  mode='train', 
@@ -217,6 +228,14 @@ def select_balanced_samples(root_dir, num_samples=None, is_training=True):
 
 
 class CityscapesLoader:
+    """Creates data loaders for labeled, unlabeled and validation splits.
+   
+    Args:
+        data_path: Dataset directory
+        num_labeled: Number of labeled samples to use
+        label_ratio: Ratio of labeled pixels in each image
+        seed: Random seed
+    """
     def __init__(self, data_path, num_labeled=None, label_ratio=None, seed=0):
         self.data_path = data_path
         self.label_ratio = label_ratio

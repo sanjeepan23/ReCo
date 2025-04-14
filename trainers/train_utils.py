@@ -3,6 +3,18 @@ import numpy as np
 import torch.nn.functional as F
 
 def adjust_learning_rate(optimizer, initial_lr, iter, total_iter, power=0.9):
+    """Adjusts learning rate using a polynomial decay schedule.
+   
+    Args:
+        optimizer: Optimizer to update
+        initial_lr: Starting learning rate
+        iter: Current iteration
+        total_iter: Total iterations
+        power: Power for polynomial decay
+    
+    Returns:
+        Current learning rate
+    """
     lr = initial_lr * (1 - iter / total_iter) ** power
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
@@ -60,6 +72,23 @@ def calculate_unsupervised_loss(outputs, pseudo_labels, conf_mask):
     return unsup_loss
 
 def reco_loss_func(rep, label, mask, prob=None, strong_threshold=1.0, temp=0.5, num_queries=256, num_negatives=256):
+    """Regional Contrast (ReCo) loss for semantic segmentation.
+   
+    Performs pixel-level contrastive learning with:
+    - Active hard query sampling based on prediction confidence
+    - Class-adaptive negative key sampling using class relation graph
+    - Normalized temperature-scaled cross entropy loss
+    
+    Args:
+        rep: Dense pixel representations [B,C,H,W]
+        label: Pixel labels [B,H,W]
+        mask: Valid pixel mask [B,H,W]
+        prob: Prediction confidence (optional)
+        strong_threshold: Threshold for hard query sampling
+        temp: Temperature for contrastive loss
+        num_queries: Maximum number of queries per class
+        num_negatives: Maximum number of negative keys
+    """
     B, C, H, W = rep.shape
     rep = rep.reshape(B, C, -1)  
     label = label.reshape(B, -1)  

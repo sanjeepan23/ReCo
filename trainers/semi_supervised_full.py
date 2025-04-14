@@ -109,6 +109,7 @@ def create_model(args):
     return model
 
 def main():
+    """Semi-Supervised Learning pipeline with ReCo, Classmix support for full label dataset"""
     args = parse_args()
 
     save_stuff = not args.disable_saving

@@ -4,6 +4,15 @@ import torch.nn.functional as F
 import copy
 
 class TeacherModel(nn.Module):
+    """Teacher model implementation for Mean-Teacher semi-supervised learning.
+   
+    Uses Exponential Moving Average (EMA) of student weights to generate stable 
+    pseudo-labels for unlabeled data.
+    
+    Args:
+        student_model: Model to create a teacher copy from
+        ema_decay: Decay rate for exponential moving average (default: 0.99)
+    """
     def __init__(self, student_model, ema_decay=0.99):
         super(TeacherModel, self).__init__()
         
